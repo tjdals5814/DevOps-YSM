@@ -18,3 +18,4 @@ trigger:
   event:
   - push
   - pull_request
+  - custom
