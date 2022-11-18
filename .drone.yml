@@ -1,16 +1,24 @@
 kind: pipeline
-name: default
+type: docker
+name: add-server-ci
 
-steps:
-- name: docker
+platform:
+  os: linux
+  arch: amd64
+
+x-build-docker-image: &x-build-docker-image
   image: plugins/docker
   settings:
+    custom_labels:
+    - 'BUILD_NUMBER=${DRONE_BUILD_NUMBER}'
+    - 'BUILD_SHA=${DRONE_COMMIT_SHA}'
+    tags:
+      - ${DRONE_COMMIT_SHA}
+      - latest
     username:
       from_secret: docker_username
     password:
       from_secret: docker_password
-    repo: tjdals5814/nginx
-    tags: latest
     
 trigger:
   ref:
@@ -19,3 +27,10 @@ trigger:
   - push
   - pull_request
   - custom
+
+steps:
+- name: build-image
+  <<: *x-build-docker-image
+  settings:
+    repo: tjdals5814/nginx
+    dockerfile: Dockerfile
