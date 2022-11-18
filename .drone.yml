@@ -1,24 +1,5 @@
 kind: pipeline
-type: docker
-name: add-server-ci
-
-platform:
-  os: linux
-  arch: amd64
-
-x-build-docker-image: &x-build-docker-image
-  image: plugins/docker
-  settings:
-    custom_labels:
-    - 'BUILD_NUMBER=${DRONE_BUILD_NUMBER}'
-    - 'BUILD_SHA=${DRONE_COMMIT_SHA}'
-    tags:
-      - ${DRONE_COMMIT_SHA}
-      - latest
-    username:
-      from_secret: docker_username
-    password:
-      from_secret: docker_password
+name: cicd-demo
 
 trigger:
   branch:
@@ -29,9 +10,12 @@ trigger:
     - pull_request
 
 steps:
-- name: build-image
-  <<: *x-build-docker-image
+- name: docker
+  image: plugins/docker
   settings:
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
     repo: tjdals5814/DevOps-YSM
-    dockerfile: Dockerfile
-    context: .
+    tags: latest
