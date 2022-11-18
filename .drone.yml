@@ -1,14 +1,6 @@
 kind: pipeline
 name: cicd-demo
 
-trigger:
-  branch:
-  - master
-  event:
-    include:
-    - push
-    - pull_request
-
 steps:
 - name: docker
   image: plugins/docker
