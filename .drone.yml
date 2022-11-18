@@ -22,7 +22,7 @@ x-build-docker-image: &x-build-docker-image
 
 trigger:
   branch:
-  - master
+  - *
   event:
     include:
     - push
