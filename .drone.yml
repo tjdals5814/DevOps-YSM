@@ -34,3 +34,4 @@ steps:
   settings:
     repo: tjdals5814/DevOps-YSM
     dockerfile: Dockerfile
+    context: .
