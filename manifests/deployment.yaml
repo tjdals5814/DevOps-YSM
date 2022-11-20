@@ -17,6 +17,6 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: tjdals5814/nginx:221118
+        image: tjdals5814/nginx:latest
         ports:
         - containerPort: 80
