@@ -36,16 +36,6 @@ steps:
   settings:
     repo: tjdals5814/nginx
     dockerfile: Dockerfile
-- name: deploy
-  image: quay.io/honestbee/drone-kubernetes
-  settings:
-    kubernetes_server: http://ec2-3-35-37-102.ap-northeast-2.compute.amazonaws.com:6443
-    kubernetes_token: CXHVLJSDKJFS...
-    namespace: app
-    deployment: my-deployment
-    repo: myorg/myrepo
-    container: my-container
-    tag: mytag
 - name: update-manifests
   pull: if-not-exists
   image: tjdals5814/update-kustomization:v1.1.2
