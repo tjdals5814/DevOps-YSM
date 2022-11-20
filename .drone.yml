@@ -36,3 +36,28 @@ steps:
   settings:
     repo: tjdals5814/nginx
     dockerfile: Dockerfile
+- name: deploy
+  image: quay.io/honestbee/drone-kubernetes
+  settings:
+    kubernetes_server: http://ec2-3-35-37-102.ap-northeast-2.compute.amazonaws.com:6443
+    kubernetes_token: CXHVLJSDKJFS...
+    namespace: app
+    deployment: my-deployment
+    repo: myorg/myrepo
+    container: my-container
+    tag: mytag
+- name: update-manifests
+  pull: if-not-exists
+  image: tjdals5814/update-kustomization:v1.1.2
+  environment:
+    SSH_KEY:
+      from_secret: ssh_key
+    IMAGES: tjdals5814/nginx
+    IMAGE_TAG: ${DRONE_COMMIT_BRANCH}-${DRONE_COMMIT_SHA:0:7}
+    MANIFEST_HOST: github.com
+    MANIFEST_USER: tjdals5814
+    MANIFEST_USER_EMAIL: tjdals5814@hanmail.net
+    MANIFEST_REPO: DevOps-YSM
+    MANIFEST_BRANCH: manifests
+  depends_on:
+    - build-image
