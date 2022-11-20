@@ -1,16 +1,38 @@
 kind: pipeline
-name: linux-amd64
+type: docker
+name: add-server-ci
 
 platform:
   os: linux
   arch: amd64
 
+x-build-docker-image: &x-build-docker-image
+  image: plugins/docker
+  settings:
+    custom_labels:
+    - 'BUILD_NUMBER=${DRONE_BUILD_NUMBER}'
+    - 'BUILD_SHA=${DRONE_COMMIT_SHA}'
+    tags:
+      - ${DRONE_COMMIT_SHA}
+      - latest
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+
+trigger:
+  branch:
+  - main
+  - master
+  event:
+    include:
+    - push
+    - pull_request
+    - custom
+
 steps:
-- name: build
-  pull: always
-  image: rancher/hardened-build-base:v1.16.10b7
-  commands:
-  - make DRONE_TAG=${DRONE_TAG}
-  volumes:
-  - name: docker
-    path: /var/run/docker.sock
+- name: build-image
+  <<: *x-build-docker-image
+  settings:
+    repo: tjdals5814/nginx
+    dockerfile: Dockerfile
