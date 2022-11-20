@@ -1,5 +1,5 @@
 kind: pipeline
-type: docker
+type: kubernetes
 name: default
 
 steps:
@@ -7,4 +7,4 @@ steps:
   image: alpine
   commands:
   - echo hello
-  - echo world2
+  - echo world
