@@ -1,14 +1,17 @@
 kind: pipeline
-name: default
+name: run_tests
 
 steps:
-- name: deploy
-  image: quay.io/honestbee/drone-kubernetes
-  settings:
-    kubernetes_server: https://kubernetes.company.org
-    kubernetes_token: CXHVLJSDKJFS...
-    namespace: app
-    deployment: my-deployment
-    repo: myorg/myrepo
-    container: my-container
-    tag: mytag
+  # Run tests against React client app (with Jest)
+  - name: client_test
+    image: node:11.6.0-alpine
+    commands:
+      - cd services/client
+      # Install dependencies (which will be cached)
+      - yarn
+      # Run tests in CI mode (i.e., don't start file watcher after tests complete)
+      - CI=true yarn test
+    volumes:
+      # Link node_modules cache from host filesystem into container at the expected location
+      - name: node_cache
+        path: /drone/src/services/client/node_modules
