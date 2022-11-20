@@ -1,10 +1,16 @@
 kind: pipeline
-type: kubernetes
-name: default
+name: linux-amd64
+
+platform:
+  os: linux
+  arch: amd64
 
 steps:
-- name: greeting
-  image: alpine
+- name: build
+  pull: always
+  image: rancher/hardened-build-base:v1.16.10b7
   commands:
-  - echo hello
-  - echo world
+  - make DRONE_TAG=${DRONE_TAG}
+  volumes:
+  - name: docker
+    path: /var/run/docker.sock
