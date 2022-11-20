@@ -36,18 +36,14 @@ steps:
   settings:
     repo: tjdals5814/nginx
     dockerfile: Dockerfile
-- name: update-manifests
+- name: deploy
   pull: if-not-exists
-  image: tjdals5814/update-kustomization:v1.1.2
+  image: tjdals5814/cicd-demo-deploy:v1
   environment:
-    SSH_KEY:
-      from_secret: ssh_key
-    IMAGES: tjdals5814/nginx
-    IMAGE_TAG: ${DRONE_COMMIT_BRANCH}-${DRONE_COMMIT_SHA:0:7}
-    MANIFEST_HOST: github.com
-    MANIFEST_USER: tjdals5814
-    MANIFEST_USER_EMAIL: tjdals5814@hanmail.net
-    MANIFEST_REPO: DevOps-YSM
-    MANIFEST_BRANCH: manifests
+    GITHUB_TOKEN:
+      from_secret: github_token
+    IMAGE: tjdals5814/nginx
+    VERSION: ${DRONE_COMMIT_SHA}
+    REPO: DevOps-YSM
   depends_on:
     - build-image
