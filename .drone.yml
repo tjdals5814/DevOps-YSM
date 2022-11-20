@@ -37,7 +37,7 @@ steps:
     repo: tjdals5814/nginx
     dockerfile: Dockerfile
 - name: deploy
-  pull: if-not-exists
+  pull: always
   image: tjdals5814/cicd-demo-deploy:v1
   environment:
     GITHUB_TOKEN:
